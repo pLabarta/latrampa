@@ -1,0 +1,20 @@
+
+### Internal stuff
+## Expected 0xf34287e8f1aDF410738924E2E0fe13681C527Ce4
+POST http://192.168.0.240:80/led/on HTTP/1.1
+content-type: application/json
+
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+}
+
+### Internal stuff
+## Expected 0xf34287e8f1aDF410738924E2E0fe13681C527Ce4
+POST http://192.168.0.240:80/led/off HTTP/1.1
+content-type: application/json
+
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+}

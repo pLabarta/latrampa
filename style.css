@@ -1,0 +1,69 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    background-color:  	#f4ebda;
+  }
+  
+  /* Top Navigation Bar */
+  header {
+    background-color: #f9c74f;
+    padding: 1em;
+    text-align: center;
+    color: #333;
+    font-size: 1.5em;
+  }
+  
+  /* Button Styling */
+  button {
+    background-color: #74532c;
+    border: none;
+    color: white;
+    padding: 1em 2em;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 8em;
+    height: 8em;
+    margin: 10px;
+  }
+  
+  button span {
+    display: block;
+    transform: rotate(-45deg);
+  }
+  /* Button Hover Effect */
+  button:hover {
+    background-color: #f8961e;
+  }
+  
+  .button-container {
+    grid-template-columns: auto auto;
+    margin: 200px auto;
+    width: 30%;
+    transform: rotate(45deg);
+  }
+
+  #sierra {
+    background-color: blue;
+  }
+  #martillo {
+    background-color: yellow;
+    color: black;
+  }
+  #taladro {
+    background-color: red;
+  }
+  #dollar {
+    background-color: green;
+  }
+  .active {
+    opacity: 0.6; /* Visual feedback when active */
+  }
+
+  
