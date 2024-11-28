@@ -34,7 +34,7 @@
     };
 
     function sendRequest(route) {
-      fetch(`http://192.168.1.6:80/${route}`)
+      fetch(`http://192.168.1.4:80/${route}`)
         .then(response => response.text())
         .then(data => console.log(data))
         .catch(error => console.error("Error:", error));
