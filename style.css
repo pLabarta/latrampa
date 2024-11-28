@@ -12,11 +12,15 @@
   
   /* Top Navigation Bar */
   header {
-    background-color: #f9c74f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #da584b;
     padding: 1em;
     text-align: center;
-    color: #333;
+    color: #fafafa;
     font-size: 1.5em;
+    height: 100px;
   }
   
   /* Button Styling */
@@ -28,9 +32,11 @@
     font-size: 1.2em;
     cursor: pointer;
     transition: background-color 0.3s;
-    width: 8em;
-    height: 8em;
+    width: 12em;
+    height: 12em;
     margin: 10px;
+    transition: 450ms;
+    border: 0px solid #f4ebda;
   }
   
   button span {
@@ -44,26 +50,48 @@
   
   .button-container {
     grid-template-columns: auto auto;
-    margin: 200px auto;
-    width: 30%;
+    margin: 200px auto 0px auto;
+    width: 600px;
     transform: rotate(45deg);
   }
 
   #sierra {
     background-color: blue;
+    border-radius: 100%;
+  }
+
+  #sierra.active{
+    background-color: #aa55ff
   }
   #martillo {
     background-color: yellow;
     color: black;
+    border-radius: 100%;
   }
+  #martillo.active{
+    background-color: #ffaa00
+  }
+
   #taladro {
     background-color: red;
+    border-radius: 100%;
   }
-  #dollar {
+
+  #taladro.active{
+    background-color: #ffaaaa
+  }
+  #silla {
     background-color: green;
+    border-radius: 100%;
   }
+  #silla.active {
+    background-color: #44ff00;
+    border-radius: 100%;
+  }
+
   .active {
-    opacity: 0.6; /* Visual feedback when active */
+    border: 10px solid #f4ebda;
   }
+/*  */
 
   

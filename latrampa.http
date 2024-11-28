@@ -11,7 +11,37 @@ content-type: application/json
 
 ### Internal stuff
 ## Expected 0xf34287e8f1aDF410738924E2E0fe13681C527Ce4
-POST http://192.168.0.240:80/led/off HTTP/1.1
+POST http://192.168.129.149:80/led/taladro HTTP/1.1
+content-type: application/json
+
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+}
+
+### Internal stuff
+## Expected 0xf34287e8f1aDF410738924E2E0fe13681C527Ce4
+POST http://192.168.129.149:80/led/sierra HTTP/1.1
+content-type: application/json
+
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+}
+
+### Internal stuff
+## Expected 0xf34287e8f1aDF410738924E2E0fe13681C527Ce4
+POST http://192.168.129.149:80/led/martillo HTTP/1.1
+content-type: application/json
+
+{
+  "id": 1,
+  "jsonrpc": "2.0",
+}
+
+### Internal stuff
+## Expected 0xf34287e8f1aDF410738924E2E0fe13681C527Ce4
+POST http://192.168.129.149:80/led/silla HTTP/1.1
 content-type: application/json
 
 {
