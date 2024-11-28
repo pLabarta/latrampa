@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaburoYa - La forma más fácil de trabajar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Navigation Bar -->
+  <header>
+    <h1>Laburo</h1>
+    <div><img src="logo.png" alt="laburo-ya"></div>
+    <div>hecho con love</div>
+  </header>
+
+  <!-- Button Interface -->
+  <div class="button-container">
+    <button id="sierra" onclick="handleButtonClick('sierra')"><span></span></button>
+    <button id="martillo" onclick="handleButtonClick('martillo')"><span></span></button>
+    <button id="silla" onclick="handleButtonClick('silla')"><span></span></button>
+    <button id="taladro" onclick="handleButtonClick('taladro')"><span></span></button>
+  </div>
+
+  <script>
+    let sequence = [];
+    let playerSequence = [];
+    const buttons = ['sierra', 'martillo', 'silla', 'taladro'];
+    const audios = {
+      sierra: new Audio('sierra.mp3'),
+      martillo: new Audio('martillo.mp3'),
+      silla: new Audio('silla.mp3'),
+      taladro: new Audio('taladro.mp3')
+    };
+
+    function sendRequest(route) {
+      fetch(`http://192.168.1.6:80/${route}`)
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.error("Error:", error));
+    }
+
+    function toggleButton(buttonId, send=false) {
+      const button = document.getElementById(buttonId);
+      button.classList.add('active');
+      audios[buttonId].play();
+      if (send) {
+        sendRequest(`led/${buttonId}`);
+      }
+      setTimeout(() => {
+        button.classList.remove('active');
+      }, 500); // Change back to normal after 500ms
+    }
+
+    function handleButtonClick(buttonId) {
+      playerSequence.push(buttonId);
+      toggleButton(buttonId, send=true);
+      checkPlayerSequence();
+    }
+
+    function checkPlayerSequence() {
+      for (let i = 0; i < playerSequence.length; i++) {
+        if (playerSequence[i] !== sequence[i]) {
+          window.location.href = `/lost.html?ganancia=${sequence.length}`;
+          return;
+        }
+      }
+      if (playerSequence.length === sequence.length) {
+        playerSequence = [];
+        setTimeout(() => {
+          addNewButtonToSequence();
+      }, 1000);
+        
+      }
+    }
+
+    function addNewButtonToSequence() {
+      const randomButton = buttons[Math.floor(Math.random() * buttons.length)];
+      sequence.push(randomButton);
+      setTimeout(playSequence, 1000); // Add delay before playing the sequence
+    }
+
+    function playSequence() {
+      let delay = 0;
+      sequence.forEach((buttonId, index) => {
+        setTimeout(() => {
+          toggleButton(buttonId);
+        }, delay);
+        delay += 1000; // 1 second delay between button presses
+      });
+    }
+
+    function startGame() {
+      sequence = [];
+      playerSequence = [];
+      setTimeout(addNewButtonToSequence, 3000); // Add delay before starting the game
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      startGame();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      switch(event.key) {
+        case 'w':
+          handleButtonClick('sierra');
+          break;
+        case 'a':
+          handleButtonClick('silla');
+          break;
+        case 's':
+          handleButtonClick('taladro');
+          break;
+        case 'd':
+          handleButtonClick('martillo');
+          break;
+      }
+    });
+  </script>
+</body>
+</html>

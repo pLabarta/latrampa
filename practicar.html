@@ -9,26 +9,24 @@
 <body>
   <!-- Top Navigation Bar -->
   <header>
-    <p>Inicio</p>
+    <h1>Laburo</h1>
     <div><img src="logo.png" alt="laburo-ya"></div>
     <div>hecho con love</div>
   </header>
 
-  <p id="intro">
-    Bienvenido a LaburoYa, la forma más fácil de trabajar.
+  <p id="contador">
   </p>
 
   <!-- Button Interface -->
   <div class="button-container">
-    <button id="sierra"><span></span></button>
-    <button id="martillo"><span></span></button>
-    <button id="silla" onclick="redirect('practicar.html')"><span>Practicar</span></button>
-    <button id="taladro" onclick="redirect('trabajar.html')"><span>Laburar</span></button>
+    <button id="sierra" onclick="handleButtonClick('sierra')"><span></span></button>
+    <button id="martillo" onclick="handleButtonClick('martillo')"><span></span></button>
+    <button id="silla" onclick="handleButtonClick('silla')"><span></span></button>
+    <button id="taladro" onclick="handleButtonClick('taladro')"><span></span></button>
   </div>
 
   <script>
-
-let sequence = [];
+    let sequence = [];
     let playerSequence = [];
     const buttons = ['sierra', 'martillo', 'silla', 'taladro'];
     const audios = {
@@ -58,34 +56,45 @@ let sequence = [];
           break;
         case 'a':
           handleButtonClick('silla');
-          setTimeout(() => {
-            redirect('practicar.html');
-          }, 500); // Change back to normal after 500ms
           break;
         case 's':
           handleButtonClick('taladro');
-          // sleep 100 ms 
-          setTimeout(() => {
-            redirect('trabajar.html');
-          }, 500); // Change back to normal after 500ms
-
           break;
         case 'd':
           handleButtonClick('martillo');
           break;
       }
     });
-   
+
+    // Start a counter when page loads that has a 30 seconds timer and then redirects to index.html
+    let counter = 10;
+
+    const interval = setInterval(() => {
+      counter--;
+      document.getElementById('contador').innerText = `Tiempo de practica: ${counter} segundos`;
+      if (counter === 0) {
+        clearInterval(interval);
+        window.location.href = `/index.html`;
+      }
+    }, 1000);
+
+    // Add a loading bar that grows with the counter
+    const loadingBar = document.createElement('div');
+    loadingBar.style.width = '100%';
+    loadingBar.style.height = '20px';
+    loadingBar.style.backgroundColor = 'orange';
+    loadingBar.style.position = 'fixed';
+    loadingBar.style.bottom = '0';
+
+    document.body.appendChild(loadingBar);
+
+    const loadingInterval = setInterval(() => {
+      loadingBar.style.width = `${(counter / 30) * 100}%`;
+    }, 1000);
+
     
-    // A function that redirects to index.html
-    function redirect(page) {
-      window.location.href = page;
-    }
 
-  
-
-
-
+    
   </script>
 </body>
 </html>

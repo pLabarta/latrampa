@@ -50,7 +50,7 @@
   
   .button-container {
     grid-template-columns: auto auto;
-    margin: 200px auto 0px auto;
+    margin: 150px auto 0px auto;
     width: 600px;
     transform: rotate(45deg);
   }
@@ -91,6 +91,27 @@
 
   .active {
     border: 10px solid #f4ebda;
+  }
+
+  #resultados {
+    width: 50%;
+    margin: 50px auto;
+    font-size: 2em;
+    text-align: center;
+  }
+
+  #intro {
+    width: 50%;
+    margin: 50px auto;
+    font-size: 2em;
+    text-align: center;
+  }
+
+  #contador {
+    width: 50%;
+    margin: 50px auto;
+    font-size: 2em;
+    text-align: center;
   }
 /*  */
 

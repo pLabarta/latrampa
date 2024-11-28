@@ -1,1 +1,108 @@
-hola
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaburoYa - La forma más fácil de trabajar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Navigation Bar -->
+  <header>
+    <p>Resultados</p>
+    <div><img src="logo.png" alt="laburo-ya"></div>
+    <div>hecho con love</div>
+  </header>
+
+  <p id="resultados">
+
+  </p>
+
+  <!-- Button Interface -->
+  <div class="button-container">
+    <button id="sierra" onclick="redirect('index.html')"><span>Inicio</span></button>
+    <button id="martillo"><span></span></button>
+    <button id="silla"><span></span></button>
+    <button id="taladro" onclick="redirect('trabajar.html')"><span>Volver a laburar</span></button>
+  </div>
+
+  <script>
+    function GetURLParameter(sParam)
+        {
+            var sPageURL = window.location.search.substring(1);
+            var sURLVariables = sPageURL.split('&');
+            for (var i = 0; i < sURLVariables.length; i++) 
+            {
+                var sParameterName = sURLVariables[i].split('=');
+                if (sParameterName[0] == sParam) 
+                {
+                    return sParameterName[1];
+                }
+            }
+        }
+    const ganancia = GetURLParameter('ganancia');
+    const resultados = document.getElementById('resultados').innerText=`Excelente, ganaste $${ganancia}\nPresioná el botón blanco para cobrar`;
+    
+    // A function that redirects to index.html
+    function redirect(page) {
+      window.location.href = page;
+    }
+
+    let sequence = [];
+    let playerSequence = [];
+    const buttons = ['sierra', 'martillo', 'silla', 'taladro'];
+    const audios = {
+      sierra: new Audio('sierra.mp3'),
+      martillo: new Audio('martillo.mp3'),
+      silla: new Audio('silla.mp3'),
+      taladro: new Audio('taladro.mp3')
+    };
+
+    function toggleButton(buttonId, send=false) {
+      const button = document.getElementById(buttonId);
+      button.classList.add('active');
+      audios[buttonId].play();
+      setTimeout(() => {
+        button.classList.remove('active');
+      }, 500); // Change back to normal after 500ms
+    }
+
+    function handleButtonClick(buttonId) {
+      toggleButton(buttonId, send=false);
+    }
+
+    document.addEventListener('keydown', (event) => {
+      switch(event.key) {
+        case 'w':
+          handleButtonClick('sierra');
+          setTimeout(() => {
+            redirect('index.html');
+          }, 500); // Change back to normal after 500ms
+          break;
+        case 'a':
+          handleButtonClick('silla');
+
+          break;
+        case 's':
+          handleButtonClick('taladro');
+          // sleep 100 ms 
+          setTimeout(() => {
+            redirect('trabajar.html');
+          }, 500); // Change back to normal after 500ms
+
+          break;
+        case 'd':
+          handleButtonClick('martillo');
+          break;
+      }
+    });
+   
+    
+    // A function that redirects to index.html
+    function redirect(page) {
+      window.location.href = page;
+    }
+
+  </script>
+</body>
+</html>
