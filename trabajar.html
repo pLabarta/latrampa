@@ -43,13 +43,14 @@
     function toggleButton(buttonId, send=false) {
       const button = document.getElementById(buttonId);
       button.classList.add('active');
+      audios[buttonId].currentTime = 0;
       audios[buttonId].play();
       if (send) {
         sendRequest(`led/${buttonId}`);
       }
       setTimeout(() => {
         button.classList.remove('active');
-      }, 500); // Change back to normal after 500ms
+      }, 100); // Change back to normal after 500ms
     }
 
     function handleButtonClick(buttonId) {
@@ -69,7 +70,7 @@
         playerSequence = [];
         setTimeout(() => {
           addNewButtonToSequence();
-      }, 1000);
+      }, 500);
         
       }
     }
@@ -77,7 +78,7 @@
     function addNewButtonToSequence() {
       const randomButton = buttons[Math.floor(Math.random() * buttons.length)];
       sequence.push(randomButton);
-      setTimeout(playSequence, 1000); // Add delay before playing the sequence
+      setTimeout(playSequence, 500); // Add delay before playing the sequence
     }
 
     function playSequence() {
@@ -93,7 +94,7 @@
     function startGame() {
       sequence = [];
       playerSequence = [];
-      setTimeout(addNewButtonToSequence, 3000); // Add delay before starting the game
+      setTimeout(addNewButtonToSequence, 100); // Add delay before starting the game
     }
 
     document.addEventListener('DOMContentLoaded', (event) => {

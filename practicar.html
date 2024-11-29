@@ -39,10 +39,11 @@
     function toggleButton(buttonId, send=false) {
       const button = document.getElementById(buttonId);
       button.classList.add('active');
+      audios[buttonId].currentTime = 0;
       audios[buttonId].play();
       setTimeout(() => {
         button.classList.remove('active');
-      }, 500); // Change back to normal after 500ms
+      }, 100); // Change back to normal after 500ms
     }
 
     function handleButtonClick(buttonId) {

@@ -7,7 +7,8 @@
   }
   
   body {
-    background-color:  	#f4ebda;
+    /* background-color:  	#f4ebda; */
+    background-color: #0e0e0e;
   }
   
   /* Top Navigation Bar */
@@ -35,8 +36,8 @@
     width: 12em;
     height: 12em;
     margin: 10px;
-    transition: 450ms;
-    border: 0px solid #f4ebda;
+    transition: 100ms;
+    border: 0px solid #0e0e0e;;
   }
   
   button span {
@@ -90,7 +91,7 @@
   }
 
   .active {
-    border: 10px solid #f4ebda;
+    border: 10px solid #0e0e0e;;
   }
 
   #resultados {
