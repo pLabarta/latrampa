@@ -9,6 +9,7 @@
   body {
     /* background-color:  	#f4ebda; */
     background-color: #0e0e0e;
+    color: #f4ebda;
   }
   
   /* Top Navigation Bar */
@@ -29,15 +30,16 @@
     background-color: #74532c;
     border: none;
     color: white;
-    padding: 1em 2em;
-    font-size: 1.2em;
+    /* padding: 1em 2em; */
+    font-size: 1.4em;
+    font-weight: bold;
     cursor: pointer;
     transition: background-color 0.3s;
     width: 12em;
     height: 12em;
     margin: 10px;
     transition: 100ms;
-    border: 0px solid #0e0e0e;;
+    border: 0px solid #0e0e0e;
   }
   
   button span {
