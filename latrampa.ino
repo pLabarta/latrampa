@@ -2,8 +2,8 @@
 #include <WebServer.h>
 
 // Config de WiFi
-const char* ssid = "Internet-2.4Ghz";
-const char* password = "int3rn3t";
+const char* ssid = "ssid de tu red";
+const char* password = "contraseña";
 
 // Config pines de las luces
 int pinR = 23;  // Canal R (Rojo)
@@ -12,18 +12,17 @@ int pinB = 21;  // Canal B (Azul)
 
 // Config para las secuencias
 int state;
-// Variables for timing
+//// Control de los tiempos
 unsigned long previousMillis = 0;
 unsigned long interval = 50; // Interval for updating brightness (milliseconds)
 
-// Breathing effect variables
+// Variables del stand-by
 float brightness = 0;   // Current brightness level
 float fadeAmount = 0.1; // Amount to change brightness (speed of breathing)
 
-// Taladro
-// State variables
+// Variables especificas de los efectos de las herramientas
+// Taladro: strobe
 int strobeCount = 0;         // Counts the number of strobe flashes
-
 // Sierra
 unsigned long rampStartMillis = 0; // Start time for the sierra effect
 
@@ -32,13 +31,14 @@ WebServer server(80);
 const int ledPin = 23;
 
 void setup() {
+  // Configuración inicial
   state = 0;
-  // put your setup code here, to run once:
   Serial.begin(115200);
   pinMode(pinR, OUTPUT);
   pinMode(pinG, OUTPUT);
   pinMode(pinB, OUTPUT);
 
+  // Inicializar la conexión WiFi
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
@@ -47,47 +47,35 @@ void setup() {
   Serial.println("Connected to WiFi");
   Serial.println(WiFi.localIP());
 
-   // Taladro
+  // Handlers de las rutas HTTP
   server.on("/led/taladro", []() {
     state = 1; // Switch to strobe state
     server.send(200, "text/plain", "Taladro mode activated");
   });
-
   server.on("/led/sierra", []() {
     state = 2; // Switch to sierra state
     rampStartMillis = millis(); // Record the start time of the ramp
     server.send(200, "text/plain", "Sierra mode activated");
   });
-
   server.on("/led/martillo", []() {
     state = 3; // Switch to sierra state
     rampStartMillis = millis(); // Record the start time of the ramp
     server.send(200, "text/plain", "Martillo mode activated");
   });
 
-  server.on("/led/off", []() {
-    digitalWrite(ledPin, LOW); // Turn the LED off
-    server.send(200, "text/plain", "LED is OFF");
-  });
-
-  // Start the server
+  // Inciar el servidor
   server.begin();
   Serial.println("Server started");
-
-  
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  // Handle client requests
+  // Consultar ultimas request HTTP
   server.handleClient();
-  // updateRgb();
-  // setColor(255,122,122);
-  // analogWrite(pinG, greenValue);
+  // Actualizar el estado de las luces
   updateRgb();
-  // Serial.println(millis());
 }
 
+// Gestión de estados de las luces
 void updateRgb() {
   if (state == 0) {
     standBy();
@@ -106,97 +94,82 @@ void standBy() {
   if (currentMillis - previousMillis >= interval) {
     previousMillis = currentMillis;
 
-    // Calculate brightness using a sine wave-like function
+    // Calcular el brillo de la luz basado en una sinusoide
     float sineWave = (sin(brightness) + 1.0) / 2.0; // Scaled to 0-1 range
     int redBrightness = int(sineWave * 255);
     int greenBrightness = int(sineWave * 255 * 0.7); // Slightly less green for a warmer yellow
     int blueBrightness = int(sineWave * 255 * 0.1);
 
-    // Set the LED color
+    // Establecer el color de la luz
     setColor(redBrightness, greenBrightness, blueBrightness);
 
-    // Increment brightness
+    // Incrementar el brillo para la siguiente iteración
     brightness += fadeAmount;
 
-    // Reset the cycle after a full wave
+    // Reiniciar el ciclo si se alcanza el máximo
     if (brightness > TWO_PI) {
       brightness = 0;
     }
   }
 }
 
-// Strobe effect for taladro
+// Efecto del taladro
 void taladro() {
   unsigned long currentMillis = millis();
 
-  if (currentMillis - previousMillis >= 100) { // 100 ms strobe interval
+  if (currentMillis - previousMillis >= 100) { // 100ms de intervalo
     previousMillis = currentMillis;
 
     if (strobeCount % 2 == 0) {
-      setColor(255, 255, 255); // White strobe
+      setColor(255, 255, 255); // Blanco
     } else {
-      setColor(255, 0, 0); // Off
+      setColor(255, 0, 0); // Rojo
     }
 
     strobeCount++;
 
-    if (strobeCount >= 10) { // After 5 strobes, return to standby
+    if (strobeCount >= 10) { // Luego de 10 ciclos, regresar al estado de espera
       state = 0;
       strobeCount = 0;
     }
   }
 }
 
-// Increasing ramp effect for sierra
+// Efecto de la sierra
 void sierra() {
   unsigned long currentMillis = millis();
   unsigned long elapsedMillis = currentMillis - rampStartMillis;
+  const rampDur = 666; // Duración de la rampa: 666ms
 
-  if (elapsedMillis <= 666) { // Ramp duration: 1 second
-    float rampProgress = elapsedMillis / 666.0; // Normalize to 0-1
-    int brightness = int(rampProgress * 255); // Scale to 0-255
+  if (elapsedMillis <= rampDur) { 
+    float rampProgress = elapsedMillis / rampDur; // Normalizar a 0-1
+    int brightness = int(rampProgress * 255); // Escalar a 0-255
 
-    setColor(brightness, brightness, brightness); // White light ramp
+    setColor(brightness, brightness, brightness);
   } else {
-    state = 0; // Return to standby after the ramp
+    state = 0;
   }
 }
 
-// Decreasing ramp effect for martillo
+// Efecto del martillo
 void martillo() {
   unsigned long currentMillis = millis();
   unsigned long elapsedMillis = currentMillis - rampStartMillis;
+  const rampDur = 400; // Duración de la rampa: 400ms
 
-  if (elapsedMillis <= 400) { // Ramp duration: 1 second
-    float rampProgress = 1.0 - (elapsedMillis / 400.0); // Normalize to 1-0
+  if (elapsedMillis <= rampDur) {
+    float rampProgress = 1.0 - (elapsedMillis / rampDur);
     int brightnessR = int(rampProgress * 255);
     int brightnessG = int(rampProgress * 255 * 0.1);
-    int brightnessB = int(rampProgress * 255); // Scale to 0-255
+    int brightnessB = int(rampProgress * 255);
 
-    setColor(brightnessR, brightnessG, brightnessB); // White light ramp
+    setColor(brightnessR, brightnessG, brightnessB);
   } else {
-    state = 0; // Return to standby after the ramp
+    state = 0;
   }
 }
 
-// void efectoTaladro() {
-//   unsigned long currentMillis = millis();
-//   if (currentMillis - previousMillis >= 20) { // Intervalo de 20 ms para destellos rápidos
-//     previousMillis = currentMillis;
-//     static bool toggle = false;
-//     toggle = !toggle; // Alternar estado
-//     if (toggle) {
-//       analogWrite(pinR, 255);
-//       analogWrite(pinG, 255);
-//       analogWrite(pinB, 255); // Blanco puro
-//     } else {
-//       turnOff(); // Apagar brevemente para crear destellos
-//     }
-//   }
-//   isLedOn = true;
-// }
-
-// Function to set the RGB LED color
+// Funcion para establecer el color de las luces
 void setColor(int redValue, int greenValue, int blueValue) {
   analogWrite(pinR, redValue);
   analogWrite(pinG, greenValue);
