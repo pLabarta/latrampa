@@ -34,15 +34,15 @@ void loop()
     // Verificar que la botonera esté conectada
     if (compositeHID.isConnected())
     {
-        press(ROJO_PIN, 'S');
-        press(AMAR_PIN, 'D');
-        press(AZUL_PIN, 'W');
-        press(VERD_PIN, 'A');
+        sendIfPressed(ROJO_PIN, 'S');
+        sendIfPressed(AMAR_PIN, 'D');
+        sendIfPressed(AZUL_PIN, 'W');
+        sendIfPressed(VERD_PIN, 'A');
     }
 }
 
 
-void press(int pin, char letra) {
+void sendIfPressed(int pin, char letra) {
     if (digitalRead(pin) == HIGH) {
         // Determinar qué boton se pulsó
         uint8_t keycode;
