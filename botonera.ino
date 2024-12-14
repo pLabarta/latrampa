@@ -10,7 +10,7 @@ int AZUL_PIN = 22;
 int VERD_PIN = 19;
 int AMAR_PIN = 18;
 
-BleCompositeHID compositeHID("ESP32 Keyboard", "Mystfit", 100);
+BleCompositeHID compositeHID("Botonera LaburoYa", "LaburoYa S.A.", 100); // Dispositivo, fabricante, nivel de bateria
 KeyboardDevice* keyboard;
 
 void setup()
