@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trabajo, Luego Existo</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Styles for the withdraw button and modal */
+    .withdraw-button {
+      background-color: #ff8c00; /* Orange */
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+      transition: transform 0.1s, background-color 0.2s;
+    }
+
+    .withdraw-button:hover {
+      background-color: #e07800;
+    }
+    
+    .withdraw-button:active {
+      transform: scale(0.95);
+    }
+    
+    /* Styles for the restart button */
+    .restart-button {
+      background-color: #4CAF50; /* Green */
+      color: white;
+      border: none;
+      padding: 20px 15px; /* Taller button */
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+      transition: transform 0.1s, background-color 0.2s;
+      width: 100%; /* Full width in container */
+      font-size: 1.5rem; /* Larger text */
+    }
+    
+    .restart-button:hover {
+      background-color: #45a049;
+    }
+    
+    .restart-button:active {
+      transform: scale(0.95);
+    }
+    
+    /* Styles for the reset difficulty button */
+    .reset-difficulty-button {
+      background-color: #e74c3c; /* Red */
+      color: white;
+      border: none;
+      padding: 15px 15px; /* Still shorter than restart but taller than before */
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 5px;
+      transition: transform 0.1s, background-color 0.2s;
+      width: 100%; /* Full width in container */
+      height: 6rem;
+      font-size: 1.5rem;
+    }
+    
+    .reset-difficulty-button:hover {
+      background-color: #c0392b; /* Darker red on hover */
+    }
+    
+    .reset-difficulty-button:active {
+      transform: scale(0.95);
+    }
+    
+    /* Styles for the extra hours button */
+    .extra-hours-button {
+      background-color: #3498db; /* Blue */
+      color: white;
+      border: none;
+      padding: 15px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 5px;
+      transition: transform 0.1s, background-color 0.2s;
+      width: 100%; /* Full width in container */
+      height: 6rem;
+      font-size: 1.5rem;
+    }
+    
+    .extra-hours-button:hover {
+      background-color: #2980b9; /* Darker blue on hover */
+    }
+    
+    .extra-hours-button:active {
+      transform: scale(0.95);
+    }
+
+    /* Level container styles */
+    .level-container {
+      position: fixed;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Level display */
+    .level-display {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #000; /* BLACK text */
+      margin-bottom: 5px;
+    }
+
+    /* Saldo container styles */
+    .saldo-container {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Updated saldo display */
+    .saldo-display {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #000; /* BLACK text */
+      margin-bottom: 5px;
+    }
+
+    /* Error message styles */
+    .error-message {
+      color: #ffffff;
+      background-color: #ff0000;
+      font-size: 1.8rem;
+      font-weight: bold;
+      text-align: center;
+      margin: 10px 0;
+      position: absolute;
+      top: 20%;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      padding: 15px 25px;
+      border-radius: 5px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      line-height: 1.3;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+    }
+
+    .modal-content {
+      background-color: #fefefe;
+      margin: 15% auto;
+      padding: 30px; /* Increased padding */
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      border-radius: 10px;
+      text-align: center;
+      color: #000; /* Explicitly set text color to black */
+    }
+
+    .modal-content h3 {
+      color: #000;
+      margin-bottom: 20px; /* Added spacing below title */
+    }
+
+    .modal-content p {
+      color: #000;
+      font-size: 16px; /* Increased font size for better readability */
+      margin-bottom: 15px;
+    }
+
+    .confirm-button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    
+    .confirm-button:hover {
+      background-color: #45a049;
+    }
+    
+    /* Password input styles */
+    .password-input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top Navigation Bar -->
+  <header>
+    <h1>Trabajo, Luego Existo</h1>
+    <div><img src="logo.png" alt="laburo-ya"></div>
+    <div>hecho con love</div>
+  </header>
+
+  <!-- Level container -->
+  <div class="level-container">
+    <div class="level-display">
+      <p>Dificultad: <span id="currentLevel">1</span></p>
+    </div>
+    <button id="restartButton" class="restart-button">Reiniciar</button>
+    <button id="resetDifficultyButton" class="reset-difficulty-button">Reiniciar dificultad</button>
+    <button id="extraHoursButton" class="extra-hours-button">Activar horas extra</button>
+  </div>
+
+  <!-- Saldo and Withdraw Button Container -->
+  <div class="saldo-container">
+    <div class="saldo-display">
+      <p>Saldo: $<span id="currentSaldo">0</span></p>
+    </div>
+    <button id="withdrawButton" class="withdraw-button">Retirar saldo</button>
+  </div>
+
+  <!-- Modal for withdrawal -->
+  <div id="withdrawModal" class="modal">
+    <div class="modal-content">
+      <h3>Comprobante de retiro</h3>
+      <p>Mostrale este comprobante a tu supervisora para cobrar $<span id="withdrawAmount">0</span></p>
+      <button id="confirmWithdraw" class="confirm-button">Listo, ya cobré</button>
+    </div>
+  </div>
+
+  <!-- Modal for password verification -->
+  <div id="passwordModal" class="modal">
+    <div class="modal-content">
+      <h3>Verificación de Admin</h3>
+      <p>Ingrese la contraseña de administrador:</p>
+      <input type="password" id="adminPassword" class="password-input">
+      <p id="passwordError" style="color: red; display: none;">Contraseña incorrecta</p>
+      <button id="confirmPassword" class="confirm-button">Confirmar</button>
+    </div>
+  </div>
+
+  <!-- Button Interface -->
+  <div class="button-container">
+    <button id="sierra" onclick="handleButtonClick('sierra')"><span></span></button>
+    <button id="martillo" onclick="handleButtonClick('martillo')"><span></span></button>
+    <button id="silla" onclick="handleButtonClick('silla')"><span></span></button>
+    <button id="taladro" onclick="handleButtonClick('taladro')"><span></span></button>
+  </div>
+
+  <!-- Error message element -->
+  <div id="errorMessage" class="error-message">Secuencia incorrecta<br>Vos podés hacerlo mejor</div>
+
+  <script>
+    let sequence = [];
+    let playerSequence = [];
+    let currentLevel = 1; // New variable to track level
+    let currentSaldo = 0; // New variable to track player's earnings
+    let extraHoursActive = false; // Flag to track if extra hours are active
+    const buttons = ['sierra', 'martillo', 'silla', 'taladro'];
+    const audios = {
+      sierra: new Audio('sierra.mp3'),
+      martillo: new Audio('martillo.mp3'),
+      silla: new Audio('silla.mp3'),
+      taladro: new Audio('taladro.mp3')
+    };
+
+    // Modal elements
+    const withdrawButton = document.getElementById('withdrawButton');
+    const withdrawModal = document.getElementById('withdrawModal');
+    const withdrawAmount = document.getElementById('withdrawAmount');
+    const confirmWithdraw = document.getElementById('confirmWithdraw');
+    const restartButton = document.getElementById('restartButton');
+    const resetDifficultyButton = document.getElementById('resetDifficultyButton');
+    const extraHoursButton = document.getElementById('extraHoursButton');
+    
+    // Password modal elements
+    const passwordModal = document.getElementById('passwordModal');
+    const adminPassword = document.getElementById('adminPassword');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const passwordError = document.getElementById('passwordError');
+    
+    // Admin password (you can change this to any password you want)
+    const ADMIN_PASSWORD = "vivaelcapitalismo";
+    
+    // Flag to track modal state
+    let isPasswordModalOpen = false;
+
+    // Restart button click handler
+    restartButton.addEventListener('click', () => {
+      restartSequence();
+    });
+
+    // Reset difficulty button click handler - now opens password modal
+    resetDifficultyButton.addEventListener('click', () => {
+      // Clear any previous password and error
+      adminPassword.value = '';
+      passwordError.style.display = 'none';
+      
+      // Set a data attribute to identify which feature requested the password
+      passwordModal.setAttribute('data-action', 'resetDifficulty');
+      
+      // Show password modal
+      passwordModal.style.display = 'block';
+      isPasswordModalOpen = true;
+    });
+    
+    // Extra hours button click handler
+    extraHoursButton.addEventListener('click', () => {
+      // Clear any previous password and error
+      adminPassword.value = '';
+      passwordError.style.display = 'none';
+      
+      // Set a data attribute to identify which feature requested the password
+      passwordModal.setAttribute('data-action', 'extraHours');
+      
+      // Show password modal
+      passwordModal.style.display = 'block';
+      isPasswordModalOpen = true;
+    });
+    
+    // Password confirmation handler
+    confirmPassword.addEventListener('click', () => {
+      if (adminPassword.value === ADMIN_PASSWORD) {
+        // Password correct, determine which action to take based on data-action
+        const action = passwordModal.getAttribute('data-action');
+        
+        if (action === 'resetDifficulty') {
+          resetDifficulty();
+        } else if (action === 'extraHours') {
+          toggleExtraHours();
+        }
+        
+        // Close modal
+        passwordModal.style.display = 'none';
+        isPasswordModalOpen = false;
+      } else {
+        // Password incorrect, show error for 2 seconds then close modal
+        passwordError.style.display = 'block';
+        setTimeout(() => {
+          passwordError.style.display = 'none';
+          setTimeout(() => {
+            passwordModal.style.display = 'none';
+            isPasswordModalOpen = false;
+          }, 500);
+        }, 2000);
+      }
+    });
+
+    // Withdraw button click handler
+    withdrawButton.addEventListener('click', () => {
+      if (currentSaldo > 0) {
+        withdrawAmount.textContent = currentSaldo;
+        withdrawModal.style.display = 'block';
+      } else {
+        alert('No hay saldo disponible para retirar');
+      }
+    });
+
+    // Confirm withdraw button click handler
+    confirmWithdraw.addEventListener('click', () => {
+      currentSaldo = 0;
+      updateDisplays();
+      saveGameState();
+      withdrawModal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (event) => {
+      if (event.target === withdrawModal) {
+        withdrawModal.style.display = 'none';
+      }
+      if (event.target === passwordModal) {
+        passwordModal.style.display = 'none';
+        isPasswordModalOpen = false;
+      }
+    });
+
+
+    function toggleButton(buttonId) {
+      const button = document.getElementById(buttonId);
+      button.classList.add('active');
+      audios[buttonId].currentTime = 0;
+      audios[buttonId].play();
+      setTimeout(() => {
+        button.classList.remove('active');
+      }, 100); // Change back to normal after 500ms
+    }
+
+    function handleButtonClick(buttonId) {
+      playerSequence.push(buttonId);
+      toggleButton(buttonId);
+      checkPlayerSequence();
+    }
+
+    function updateDisplays() {
+      // Update both level and saldo displays
+      document.getElementById('currentSaldo').textContent = currentSaldo;
+      document.getElementById('currentLevel').textContent = currentLevel;
+    }
+
+    function saveGameState() {
+      localStorage.setItem('laburyaLevel', currentLevel.toString());
+      localStorage.setItem('laburyaSaldo', currentSaldo.toString());
+    }
+
+    function loadGameState() {
+      const savedLevel = localStorage.getItem('laburyaLevel');
+      const savedSaldo = localStorage.getItem('laburyaSaldo');
+      const savedExtraHours = localStorage.getItem('laburyaExtraHours');
+      
+      if (savedLevel) {
+        currentLevel = parseInt(savedLevel);
+        if (savedSaldo) {
+          currentSaldo = parseInt(savedSaldo);
+        }
+        
+        // Load extra hours status if available
+        if (savedExtraHours === 'true') {
+          extraHoursActive = true;
+          extraHoursButton.style.backgroundColor = "#27ae60"; // Bright green when active
+          extraHoursButton.textContent = "Horas extra ACTIVAS";
+        }
+        
+        updateDisplays();
+        return true;
+      }
+      return false;
+    }
+
+    function checkPlayerSequence() {
+      for (let i = 0; i < playerSequence.length; i++) {
+        if (playerSequence[i] !== sequence[i]) {
+          // Show error message instead of redirecting
+          showErrorMessage();
+          return;
+        }
+      }
+      
+      if (playerSequence.length === sequence.length) {
+        // Player completed the sequence successfully
+        playerSequence = [];
+        
+        // Level up
+        currentLevel++;
+        
+        // Increase saldo based on whether extra hours are active
+        if (extraHoursActive) {
+          currentSaldo += 10; // Add 10 to saldo when extra hours are active (changed from 5)
+        } else {
+          currentSaldo += 1; // Add 1 to saldo normally
+        }
+        
+        updateDisplays();
+        saveGameState();
+        
+        setTimeout(() => {
+          generateNewSequence();
+        }, 1000);
+      }
+    }
+
+    // Function to show error message for 2 seconds then restart the sequence
+    function showErrorMessage() {
+      const errorMessage = document.getElementById('errorMessage');
+      errorMessage.style.display = 'block';
+      
+      // Save current game state
+      saveGameState();
+      
+      // Reset player sequence
+      playerSequence = [];
+      
+      // Hide error message and restart sequence after 2 seconds
+      setTimeout(() => {
+        errorMessage.style.display = 'none';
+        restartSequence();
+      }, 2000);
+    }
+
+    function generateNewSequence() {
+      // Generate a completely new sequence based on current level
+      sequence = [];
+      for (let i = 0; i < currentLevel; i++) {
+        const randomButton = buttons[Math.floor(Math.random() * buttons.length)];
+        sequence.push(randomButton);
+      }
+      
+      setTimeout(playSequence, 500); // Add delay before playing the sequence
+    }
+
+    function playSequence() {
+      let delay = 0;
+      sequence.forEach((buttonId, index) => {
+        setTimeout(() => {
+          toggleButton(buttonId);
+        }, delay);
+        delay += 1000; // 1 second delay between button presses
+      });
+    }
+
+    function startGame() {
+      // Try to load the saved game state
+      const hasExistingGame = loadGameState();
+      
+      if (!hasExistingGame) {
+        // If no saved game, start at level 1 with saldo 0
+        currentLevel = 1;
+        currentSaldo = 0;
+        updateDisplays();
+      }
+      
+      // Always generate a new sequence for the current level
+      generateNewSequence();
+      
+      // Always reset player sequence when starting
+      playerSequence = [];
+    }
+
+    // Add a reset button event (you can add a reset button to the HTML if needed)
+    function resetGame() {
+      localStorage.removeItem('laburyaLevel');
+      localStorage.removeItem('laburyaSaldo');
+      currentLevel = 1;
+      currentSaldo = 0;
+      sequence = [];
+      playerSequence = [];
+      updateDisplays();
+      generateNewSequence();
+    }
+    
+    // Function to restart the current sequence without resetting progress
+    function restartSequence() {
+      // Reset only the player sequence and generate a new sequence at current level
+      playerSequence = [];
+      sequence = [];
+      
+      // Generate a new sequence at the current level
+      for (let i = 0; i < currentLevel; i++) {
+        const randomButton = buttons[Math.floor(Math.random() * buttons.length)];
+        sequence.push(randomButton);
+      }
+      
+      // Play the new sequence
+      setTimeout(playSequence, 500);
+    }
+    
+    // Function to reset difficulty level without resetting saldo
+    function resetDifficulty() {
+      // Reset only the level to 1, keep the saldo
+      currentLevel = 1;
+      playerSequence = [];
+      sequence = [];
+      updateDisplays();
+      saveGameState();
+      
+      // Generate a new sequence for level 1
+      generateNewSequence();
+    }
+
+    // Function to toggle extra hours mode
+    function toggleExtraHours() {
+      extraHoursActive = !extraHoursActive;
+      
+      // Show visual feedback
+      if (extraHoursActive) {
+        extraHoursButton.style.backgroundColor = "#27ae60"; // Bright green when active
+        extraHoursButton.textContent = "Horas extra ACTIVAS";
+      } else {
+        extraHoursButton.style.backgroundColor = "#3498db"; // Back to blue when inactive
+        extraHoursButton.textContent = "Activar horas extra";
+      }
+      
+      // Save to localStorage
+      localStorage.setItem('laburyaExtraHours', extraHoursActive.toString());
+    }
+
+    document.addEventListener('DOMContentLoaded', (event) => {
+      startGame();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      // Ignore key presses if password modal is open
+      if (isPasswordModalOpen) {
+        return;
+      }
+      
+      switch(event.key) {
+        case 'w':
+          handleButtonClick('sierra');
+          break;
+        case 'a':
+          handleButtonClick('silla');
+          break;
+        case 's':
+          handleButtonClick('taladro');
+          break;
+        case 'd':
+          handleButtonClick('martillo');
+          break;
+        case 'r':
+          resetGame(); // Add keyboard shortcut to reset game
+          break;
+      }
+    });
+  </script>
+</body>
+</html>
