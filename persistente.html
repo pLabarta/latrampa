@@ -176,14 +176,14 @@
 
     .modal-content {
       background-color: #fefefe;
-      margin: 15% auto;
-      padding: 30px; /* Increased padding */
+      margin: 5% auto;
+      padding: 30px;
       border: 1px solid #888;
-      width: 80%;
-      max-width: 400px;
+      width: 95%; /* Changed from 90% to 95% */
+      max-width: 800px; /* Changed from 600px to 800px */
       border-radius: 10px;
       text-align: center;
-      color: #000; /* Explicitly set text color to black */
+      color: #000;
     }
 
     .modal-content h3 {
@@ -220,6 +220,59 @@
       border-radius: 5px;
       font-size: 16px;
       box-sizing: border-box;
+    }
+
+    /* Updated Virtual keyboard styles with even bigger buttons */
+    .virtual-keyboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 15px;
+      width: 100%;
+    }
+    
+    .keyboard-row {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px; /* Increased space between rows */
+      width: 100%;
+      flex-wrap: wrap; /* Allow wrapping for smaller screens */
+    }
+    
+    .key {
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 10px; /* Increased roundness */
+      color: #000;
+      cursor: pointer;
+      font-size: 26px; /* Even larger font */
+      font-weight: bold;
+      margin: 0 4px; /* More space between buttons */
+      min-width: 55px; /* Much bigger buttons */
+      min-height: 55px; /* Much bigger buttons */
+      padding: 12px; /* More padding */
+      text-align: center;
+      transition: background-color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .key:hover {
+      background-color: #e0e0e0;
+    }
+    
+    .key:active {
+      background-color: #d0d0d0;
+      transform: scale(0.95);
+    }
+    
+    .key.wide {
+      min-width: 70px;
+    }
+    
+    .key.extra-wide {
+      min-width: 120px;
     }
   </style>
 </head>
@@ -266,6 +319,62 @@
       <input type="password" id="adminPassword" class="password-input">
       <p id="passwordError" style="color: red; display: none;">Contraseña incorrecta</p>
       <button id="confirmPassword" class="confirm-button">Confirmar</button>
+
+      <!-- Virtual Keyboard for password input -->
+      <div class="virtual-keyboard">
+        <!-- Single row for all numbers -->
+        <div class="keyboard-row">
+          <div class="key" onclick="appendToPassword('1')">1</div>
+          <div class="key" onclick="appendToPassword('2')">2</div>
+          <div class="key" onclick="appendToPassword('3')">3</div>
+          <div class="key" onclick="appendToPassword('4')">4</div>
+          <div class="key" onclick="appendToPassword('5')">5</div>
+          <div class="key" onclick="appendToPassword('6')">6</div>
+          <div class="key" onclick="appendToPassword('7')">7</div>
+          <div class="key" onclick="appendToPassword('8')">8</div>
+          <div class="key" onclick="appendToPassword('9')">9</div>
+          <div class="key" onclick="appendToPassword('0')">0</div>
+        </div>
+        
+        <!-- Letter rows - QWERTY layout -->
+        <div class="keyboard-row">
+          <div class="key" onclick="appendToPassword('q')">Q</div>
+          <div class="key" onclick="appendToPassword('w')">W</div>
+          <div class="key" onclick="appendToPassword('e')">E</div>
+          <div class="key" onclick="appendToPassword('r')">R</div>
+          <div class="key" onclick="appendToPassword('t')">T</div>
+          <div class="key" onclick="appendToPassword('y')">Y</div>
+          <div class="key" onclick="appendToPassword('u')">U</div>
+          <div class="key" onclick="appendToPassword('i')">I</div>
+          <div class="key" onclick="appendToPassword('o')">O</div>
+          <div class="key" onclick="appendToPassword('p')">P</div>
+        </div>
+        <div class="keyboard-row">
+          <div class="key" onclick="appendToPassword('a')">A</div>
+          <div class="key" onclick="appendToPassword('s')">S</div>
+          <div class="key" onclick="appendToPassword('d')">D</div>
+          <div class="key" onclick="appendToPassword('f')">F</div>
+          <div class="key" onclick="appendToPassword('g')">G</div>
+          <div class="key" onclick="appendToPassword('h')">H</div>
+          <div class="key" onclick="appendToPassword('j')">J</div>
+          <div class="key" onclick="appendToPassword('k')">K</div>
+          <div class="key" onclick="appendToPassword('l')">L</div>
+        </div>
+        <div class="keyboard-row">
+          <div class="key" onclick="appendToPassword('z')">Z</div>
+          <div class="key" onclick="appendToPassword('x')">X</div>
+          <div class="key" onclick="appendToPassword('c')">C</div>
+          <div class="key" onclick="appendToPassword('v')">V</div>
+          <div class="key" onclick="appendToPassword('b')">B</div>
+          <div class="key" onclick="appendToPassword('n')">N</div>
+          <div class="key" onclick="appendToPassword('m')">M</div>
+        </div>
+        
+        <div class="keyboard-row">
+          <div class="key wide" onclick="appendToPassword(' ')">Space</div>
+          <div class="key extra-wide" onclick="clearPassword()">Clear</div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -632,6 +741,15 @@
           break;
       }
     });
+
+    function appendToPassword(digit) {
+      adminPassword.value += digit;
+    }
+
+    function clearPassword() {
+      adminPassword.value = '';
+      passwordError.style.display = 'none';
+    }
   </script>
 </body>
 </html>
